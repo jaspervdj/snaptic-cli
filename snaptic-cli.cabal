@@ -1,0 +1,24 @@
+Name:                snaptic-cli
+Version:             0.1
+Synopsis:            Command line interface to snaptic.com
+License-file:        LICENSE
+Author:              Jasper Van der Jeugt
+Maintainer:          jaspervdj@gmail.com
+Stability:           Experimental
+Category:            Tools
+Build-type:          Simple
+Cabal-version:       >= 1.2
+
+Executable snaptic-cli
+  Ghc-Options:       -Wall -O2
+  Main-Is:           Main.hs
+  Other-Modules:     Snaptic,
+                     Snaptic.Parse,
+                     Snaptic.Http
+  Build-depends:     base >= 4 && < 5,
+                     monads-fd >= 0.1,
+                     json >= 0.4,
+                     curl >= 1.3,
+                     process >= 1.0,
+                     filepath >= 1.1,
+                     directory >= 1.0
