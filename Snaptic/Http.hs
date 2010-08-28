@@ -65,4 +65,4 @@ deleteNote i = withNotes $ \notes -> case drop (i - 1) notes of
     -- We use the command line curl utility here because haskell-curl
     -- does not support DELETE for some reason.
     cmdTemplate = "curl -X DELETE -u %s:%s \
-                  \https://api.snaptic.com/v1/notes/%d"
+                  \https://api.snaptic.com/v1/notes/%d >/dev/null 2>&1"
