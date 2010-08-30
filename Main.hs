@@ -58,6 +58,7 @@ commands = do
                     , ("list", list)
                     , ("add", add)
                     , ("delete", delete)
+                    , ("get", get)
                     ]
             in command xs
 
@@ -77,6 +78,7 @@ help _ = liftIO $ do
         , "  list          List all notes"
         , "  add <text>    Add a note"
         , "  delete <id>   Delete a note"
+        , "  get <id>      Show a single note"
         , ""
         ]
 
@@ -101,3 +103,9 @@ add xs = addNote $ unwords xs
 delete :: [String] -> Snaptic ()
 delete [id'] = deleteNote (read id')
 delete _ = liftIO $ putStrLn "Give one number to delete a note"
+
+-- | Get (show) a note
+--
+get :: [String] -> Snaptic ()
+get [id'] = flip withNote (read id') $ liftIO . putStrLn . noteText
+get _ = liftIO $ putStrLn "Give one number to get a note"

@@ -2,6 +2,7 @@
 --
 module Snaptic.Http
     ( withNotes
+    , withNote
     , addNote
     , deleteNote
     ) where
@@ -42,6 +43,13 @@ withParse uri parse action = do
 withNotes :: ([Note] -> Snaptic ()) -> Snaptic ()
 withNotes = withParse "https://api.snaptic.com/v1/notes" parseNotes
 
+-- | Perform an action on one note, specified by 1-based index
+--
+withNote :: (Note -> Snaptic ()) -> Int -> Snaptic ()
+withNote f i = withNotes $ \notes -> case drop (i - 1) notes of
+    (note : _) -> f note
+    _ -> liftIO $ putStrLn $ "Note " ++ show i ++ " was not found."
+
 -- | Add a note
 --
 addNote :: String -> Snaptic ()
@@ -53,14 +61,12 @@ addNote text = do
 -- | Delete a note
 --
 deleteNote :: Int -> Snaptic ()
-deleteNote i = withNotes $ \notes -> case drop (i - 1) notes of
-    (note : _) -> do
-        config <- ask 
-        _ <- liftIO $ system $ printf cmdTemplate (snapticUserName config)
-                                                  (snapticPassword config)
-                                                  (noteId note)
-        return ()
-    _ -> liftIO $ putStrLn "Note not found!"
+deleteNote = withNote $ \note -> do
+    config <- ask 
+    _ <- liftIO $ system $ printf cmdTemplate (snapticUserName config)
+                                              (snapticPassword config)
+                                              (noteId note)
+    return ()
   where
     -- We use the command line curl utility here because haskell-curl
     -- does not support DELETE for some reason.

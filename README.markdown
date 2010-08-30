@@ -15,3 +15,4 @@ Commands
     list          List all notes
     add <text>    Add a note
     delete <id>   Delete a note
+    get <id>      Show a single note
